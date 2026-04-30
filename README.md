@@ -101,11 +101,37 @@ flowchart LR
 pip install -r requirements.txt
 ```
 
-3. Run the app:
+3. Run the app with a free-text query:
 
 ```bash
-python -m src.main
+python -m src.main "chill lofi for studying"
+python -m src.main "high energy pop for the gym"
+python -m src.main "acoustic folk for a slow morning"
 ```
+
+The first run downloads the `all-MiniLM-L6-v2` embedding model (~80 MB)
+and builds `data/song_vectors.pkl`; later runs read the cache.
+
+To replay the original four Phase-4 evaluation profiles (no query, no
+retrieval — used by [reflection.md](reflection.md)):
+
+```bash
+python -m src.main --demo
+```
+
+### Pipeline (query mode)
+
+```
+free-text query
+  -> query_parser.parse_query          # keyword/regex -> {genre, mood, energy, likes_acoustic}
+  -> rag.retrieve                      # MiniLM cosine -> top-15 candidates
+  -> recommender.score_song re-ranks   # Phase-1 scoring -> top-5
+  -> main.py prints parsed prefs, retrieval cosines, final scores + reasons
+```
+
+The AI feature is load-bearing: without retrieval, no candidates enter the
+final ranker. The deterministic `score_song` from Phase 1 still does the
+final re-rank so the Phase-4 evaluation logic is unchanged.
 
 ### Running Tests
 

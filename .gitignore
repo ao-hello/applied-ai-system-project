@@ -13,3 +13,6 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+
+# RAG embedding cache (regenerated on first run)
+data/song_vectors.pkl

@@ -1,21 +1,21 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,Basement Riot,Crashline,punk,intense,0.95,168,0.42,0.55,0.06
-12,Velvet Hours,Mira Solace,jazz,moody,0.33,86,0.38,0.49,0.81
-13,Paper Planes Dance,Kite Kids,indie pop,happy,0.71,120,0.83,0.80,0.28
-14,Deep Blue Drift,Orbit Bloom,ambient,relaxed,0.22,58,0.55,0.35,0.94
-15,Trap House Sunrise,K-Raze,hip hop,intense,0.88,140,0.52,0.91,0.08
-16,Lowkey Confessions,Slow Stereo,r&b,moody,0.45,92,0.41,0.68,0.55
-17,Festival Pulse,Max Pulse,edm,happy,0.94,128,0.78,0.93,0.04
-18,Study Fog,LoRoom,lofi,focused,0.38,76,0.52,0.57,0.82
-19,Canyon Folk,Pine & Willow,folk,relaxed,0.30,98,0.67,0.44,0.88
-20,Afterhours Groove,Neon Echo,synthwave,chill,0.58,104,0.60,0.74,0.30
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,descriptor
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,Bright upbeat pop anthem perfect for morning runs and sunny commutes with shimmering synths and a singalong chorus.
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,Mellow late-night lofi beat with soft piano and gentle vinyl crackle ideal for studying focusing or winding down.
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,Heavy driving rock track with distorted guitars and pounding drums built for workouts and adrenaline-fueled drives.
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,Soft acoustic lofi with field-recorded rain sounds and warm guitar perfect for quiet reading or rainy afternoons.
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,High-octane pop power track with thumping bass and motivating hooks built specifically for gym sessions and cardio.
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,Floating ambient soundscape with ethereal pads and slow synth washes perfect for meditation sleep or deep focus.
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,Smooth acoustic jazz with brushed drums and warm upright bass capturing a cozy cafe atmosphere on a slow morning.
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,Retro synthwave with neon-lit pulsing arpeggios and analog drum machines made for solo nighttime highway drives.
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,Clean instrumental lofi with steady beat and soft melodic loops engineered for deep work concentration and study sessions.
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,Joyful indie pop with jangly guitars handclaps and warm vocals capturing summer evening rooftop parties with friends.
+11,Basement Riot,Crashline,punk,intense,0.95,168,0.42,0.55,0.06,Raw furious punk with screaming vocals and breakneck drums for moshing skating and channeling pure aggressive energy.
+12,Velvet Hours,Mira Solace,jazz,moody,0.33,86,0.38,0.49,0.81,Late-night smoky jazz ballad with sultry saxophone and dim lounge atmosphere for introspective wine-on-the-couch evenings.
+13,Paper Planes Dance,Kite Kids,indie pop,happy,0.71,120,0.83,0.80,0.28,Bouncy indie pop with playful synths and twinkling melodies that feels like a sunny afternoon dance party in the kitchen.
+14,Deep Blue Drift,Orbit Bloom,ambient,relaxed,0.22,58,0.55,0.35,0.94,Slow drifting ambient with underwater textures and barely-there percussion perfect for yoga sleep or quiet decompression.
+15,Trap House Sunrise,K-Raze,hip hop,intense,0.88,140,0.52,0.91,0.08,Hard-hitting trap with booming 808s and rapid-fire hi-hats built for parties workouts and high-energy hype moments.
+16,Lowkey Confessions,Slow Stereo,r&b,moody,0.45,92,0.41,0.68,0.55,Smooth modern r&b with hushed vocals and warm rhodes piano for late-night introspection and emotional reflection.
+17,Festival Pulse,Max Pulse,edm,happy,0.94,128,0.78,0.93,0.04,Massive festival-ready edm drop with euphoric synth leads and pounding kicks made for dancing and crowd-surfing energy.
+18,Study Fog,LoRoom,lofi,focused,0.38,76,0.52,0.57,0.82,Hazy mellow lofi with muted melodies and soft tape hiss tailored for long study sessions reading or focused work.
+19,Canyon Folk,Pine & Willow,folk,relaxed,0.30,98,0.67,0.44,0.88,Warm acoustic folk with fingerpicked guitar and gentle harmonies evoking open landscapes campfires and slow weekends.
+20,Afterhours Groove,Neon Echo,synthwave,chill,0.58,104,0.60,0.74,0.30,Smooth chilled synthwave with laid-back beats and dreamy pads perfect for late-night unwinding or cocktail-hour vibes.
