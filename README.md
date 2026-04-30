@@ -8,15 +8,15 @@ A small, transparent music recommender. You describe the vibe in plain English (
 
 This started as the **Music Recommender Simulation** from the course's Modules 1–3. The original scope: represent songs and a single user "taste profile" as data, design a content-based scoring rule that turns those features into a top-5 ranking, and evaluate the system across multiple user profiles. It produced deterministic recommendations from rigid categorical inputs (favorite genre, favorite mood, target energy level), with no notion of natural-language input or semantic similarity.
 
-Phase 5 (this version) keeps that scoring logic intact and adds an AI-driven retrieval layer on top so users can talk to the recommender in their own words.
+this version keeps that scoring logic intact and adds an AI-driven retrieval layer on top so users can talk to the recommender in their own words.
 
 ---
 
 ## What It Does and Why It Matters
 
-VibeFinder accepts a free-text query, parses it into structured preferences, retrieves the most semantically relevant candidates from the catalog using sentence embeddings, and re-ranks them with the original Module-3 scoring rule. Every recommendation comes with a "Because: ..." explanation showing exactly which signals contributed to its score.
+VibeFinder accepts a free-text query, parses it into structured preferences, retrieves the most semantically relevant candidates from the catalog using sentence embeddings, and re-ranks them with the original scoring rule. Every recommendation comes with a "Because: ..." explanation showing exactly which signals contributed to its score.
 
-**Why it matters as a portfolio piece:** real recommenders are almost always opaque — you get a list, but not a reason. This project demonstrates that a useful AI feature (semantic search over a small catalog) can be layered onto deterministic, explainable logic without giving up either. The AI is *load-bearing* (without retrieval, no candidates enter the ranker) but does not replace the rule-based scoring it sits in front of.
+**Why it matters as a portfolio piece:** real recommenders are almost always opaque. you get a list, but not a reason. This project demonstrates that a useful AI feature (semantic search over a small catalog) can be layered onto deterministic, explainable logic without giving up either. The AI is *load-bearing* (without retrieval, no candidates enter the ranker) but does not replace the rule-based scoring it sits in front of.
 
 ---
 
@@ -66,6 +66,14 @@ python -m src.main "chill lofi for studying"
 ```
 
 The first query downloads the MiniLM model (~80MB) and builds `data/song_vectors.pkl`; subsequent queries reuse the cache and are near-instant.
+
+**To launch the interactive Streamlit UI** (recommended for the live demo):
+
+```bash
+streamlit run app.py
+```
+
+This opens a browser-based version of the same pipeline: type a query, see the parsed prefs, the top-15 retrieval candidates, and the final top-5 with explanations. The CLI remains the canonical interface for scripting and evaluation; the UI is a thin wrapper for demos.
 
 **To replay the original Module-3 evaluation** (four hand-coded profiles, no retrieval):
 
@@ -243,6 +251,19 @@ tests/
 eval/
   run_eval.py        # Held-out 12-query reliability eval
   results.md         # Latest eval output (hit rates, confidence)
+app.py               # Streamlit UI wrapper (demo surface)
 model_card.md        # Intended use, limitations, bias
 reflection.md        # Four-profile evaluation + weight-shift experiment
 ```
+
+---
+
+## Portfolio Artifact
+
+- **Code:** [github.com/ao-hello/applied-ai-system-final](https://github.com/ao-hello/applied-ai-system-final)
+- **Live demo (Loom walkthrough):** *[...]*
+- **Try it locally:** `streamlit run app.py` (interactive UI) or `python -m src.main "your query"` (CLI).
+
+### What this project says about me as an AI engineer
+
+I treat AI as a layer to integrate carefully, not a black box to bolt on. Rather than rewriting the original Module-3 recommender around an LLM, I layered semantic retrieval *on top* of the deterministic scorer so every final recommendation still carries a human-readable "Because: ..." breakdown while the system genuinely understands free-text queries. I built a held-out 12-query evaluation with hit rate and confidence metrics before calling the project done, wrote a model card and a reflection on bias, misuse, and limitations, and made deliberate reproducibility tradeoffs (local 80MB MiniLM embeddings, no API call in the pipeline) so anyone can clone and run it with no key, no rate limit, no cost. I'd rather ship a small, transparent, evaluable system than a flashy one I can't reason about and I'd rather know where my AI feature is *load-bearing* than wave at it as "AI-powered" and hope the user doesn't ask why.
