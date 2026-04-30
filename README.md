@@ -224,7 +224,7 @@ Two big takeaways from this project:
 
 **Explainability and AI are not at odds.** I expected adding a neural retrieval step to obscure the recommendations, but because the AI only changes which 15 songs the deterministic scorer sees, every final recommendation still comes with the same human-readable "Because: ..." breakdown. This convinced me that the choice between "explainable" and "ML-powered" is mostly false — you can usually have both if you're thoughtful about pipeline placement.
 
-For deeper reflection on bias, evaluation, and what surprised me about the original scorer's behavior, see [model_card.md](model_card.md) and [reflection.md](reflection.md).
+For deeper reflection on bias, evaluation, and what surprised me about the original scorer's behavior, see [model_card.md](model_card.md) and [reflection.md](reflection.md). The Reflection and Ethics section in [reflection.md](reflection.md#reflection-and-ethics) covers limitations and bias of the RAG layer, misuse risk, what surprised me in reliability testing, and one helpful and one flawed suggestion from collaborating with Claude during the build.
 
 ---
 
