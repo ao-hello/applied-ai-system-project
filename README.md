@@ -79,6 +79,14 @@ python -m src.main --demo
 pytest
 ```
 
+**To run the held-out evaluation** (12 free-text queries, one per genre):
+
+```bash
+python -m eval.run_eval
+```
+
+Results write to [eval/results.md](eval/results.md).
+
 ---
 
 ## Sample Interactions
@@ -185,11 +193,20 @@ This is the most interesting sample: the words "rainy night" do not appear in an
 
 ## Testing Summary
 
-**18 tests pass** across three modules:
+**18 unit tests pass** across three modules:
 
 - `tests/test_query_parser.py` — 13 keyword-extraction unit tests covering genre, mood, energy, and acoustic detection (including multi-word genres like *"indie pop"* and *"hip hop"*).
 - `tests/test_rag.py` — retrieval sanity checks: a chill query surfaces lofi/ambient at the top, a workout query surfaces high-energy pop. Verifies the cache rebuilds when the corpus changes.
 - `tests/test_recommender.py` — original Module-3 scorer math: feature loading, score formula, top-K selection, ties.
+
+**Held-out evaluation (12 queries, one per catalog genre).** Each query is paired with the genre we expect to see in the top-5; a *hit* means that genre appears.
+
+- Retrieval hit rate (cosine top-5): **12/12**
+- Final hit rate (after re-rank): **12/12**
+- Mean top-1 cosine confidence: **0.606** (range 0.457–0.712, threshold 0.40 for "low confidence" — 0/12 fell below)
+- Parser fill rate (genre + mood both extracted): **10/12** — the two misses (*"festival edm dance party"*, *"smooth r&b late night"*) fall back cleanly to retrieval-only, which still returns a hit.
+
+Full per-query table in [eval/results.md](eval/results.md), regenerable via `python -m eval.run_eval`.
 
 **What worked.** The retrieval surprisingly outperforms expectations on metaphorical queries — *"moody jazz for a rainy night"* pulled the right songs even though "rainy" doesn't appear in any metadata. The two-stage pipeline (retrieve → re-rank) keeps the explainability of the original scorer intact while adding genuine semantic understanding.
 
@@ -223,6 +240,9 @@ data/
   songs.csv          # 20 songs with descriptors
 tests/
   test_query_parser.py, test_rag.py, test_recommender.py
+eval/
+  run_eval.py        # Held-out 12-query reliability eval
+  results.md         # Latest eval output (hit rates, confidence)
 model_card.md        # Intended use, limitations, bias
 reflection.md        # Four-profile evaluation + weight-shift experiment
 ```
