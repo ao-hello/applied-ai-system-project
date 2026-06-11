@@ -2,6 +2,11 @@
 
 A small, transparent music recommender. You describe the "vibe" of the music you want to listen to in plain English ("chill lofi for studying"), and it returns five songs from a 20-track catalog with a human-readable explanation for every pick.
 
+
+
+https://github.com/user-attachments/assets/a02529e3-46d8-4da8-89fc-d90ec4deaea1
+
+
 ---
 
 ## What It Does and Why It Matters
