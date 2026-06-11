@@ -1,14 +1,6 @@
 # 🎵 VibeFinder — Music Recommender with Free-Text Search
 
-A small, transparent music recommender. You describe the vibe in plain English ("chill lofi for studying"), and it returns five songs from a 20-track catalog with a human-readable explanation for every pick.
-
----
-
-## Original Project (Modules 1–3)
-
-This started as the **Music Recommender Simulation** from the course's Modules 1–3. The original scope: represent songs and a single user "taste profile" as data, design a content-based scoring rule that turns those features into a top-5 ranking, and evaluate the system across multiple user profiles. It produced deterministic recommendations from rigid categorical inputs (favorite genre, favorite mood, target energy level), with no notion of natural-language input or semantic similarity.
-
-this version keeps that scoring logic intact and adds an AI-driven retrieval layer on top so users can talk to the recommender in their own words.
+A small, transparent music recommender. You describe the "vibe" of the music you want to listen to in plain English ("chill lofi for studying"), and it returns five songs from a 20-track catalog with a human-readable explanation for every pick.
 
 ---
 
@@ -16,7 +8,7 @@ this version keeps that scoring logic intact and adds an AI-driven retrieval lay
 
 VibeFinder accepts a free-text query, parses it into structured preferences, retrieves the most semantically relevant candidates from the catalog using sentence embeddings, and re-ranks them with the original scoring rule. Every recommendation comes with a "Because: ..." explanation showing exactly which signals contributed to its score.
 
-**Why it matters as a portfolio piece:** real recommenders are almost always opaque. you get a list, but not a reason. This project demonstrates that a useful AI feature (semantic search over a small catalog) can be layered onto deterministic, explainable logic without giving up either. The AI is *load-bearing* (without retrieval, no candidates enter the ranker) but does not replace the rule-based scoring it sits in front of.
+*Real recommenders are almost always opaque. You get a list, but not a reason. This project demonstrates that a useful AI feature (semantic search over a small catalog) can be layered onto deterministic, explainable logic without giving up either. The AI is *load-bearing* (without retrieval, no candidates enter the ranker) but does not replace the rule-based scoring it sits in front of.
 
 ---
 
@@ -36,9 +28,9 @@ flowchart LR
 
 Two parallel passes, then a join:
 
-1. **Query parser** (`src/query_parser.py`) — keyword/regex extraction over the free-text query. Returns a structured prefs dict (`genre`, `mood`, `energy`, `likes_acoustic`) shaped to feed the original scorer. No LLM, fully deterministic.
-2. **Retrieval** (`src/rag.py`) — embeds the query with `sentence-transformers/all-MiniLM-L6-v2` (a free, local 80MB model), computes cosine similarity against pre-embedded song descriptors, and returns the top-15 candidates. Embeddings are cached to `data/song_vectors.pkl` and rebuilt automatically if missing or stale.
-3. **Re-rank** (`src/recommender.py`) — the original Module-3 `score_song` function takes the parsed prefs and the 15 candidates, scores each, sorts, and returns the top-5 with explanations.
+1. **Query parser** (`src/query_parser.py`) — keyword/regex extraction over the free-text query. Returns a structured prefs dict (`genre`, `mood`, `energy`, `likes_acoustic`) shaped to feed the original scorer
+2. **Retrieval** (`src/rag.py`) — embeds the query with `sentence-transformers/all-MiniLM-L6-v2` (a free, local 80MB model), computes cosine similarity against pre-embedded song descriptors, and returns the top-15 candidates. Embeddings are cached to `data/song_vectors.pkl` and rebuilt automatically if missing or stale
+3. **Re-rank** (`src/recommender.py`) —  takes the parsed prefs and the 15 candidates, scores each, sorts, and returns the top-5 with explanations
 
 The deterministic scorer is unchanged from Phase 1 — the same logic that powered the four-profile evaluation in Module 3 still does the final ranking.
 
@@ -46,7 +38,7 @@ The deterministic scorer is unchanged from Phase 1 — the same logic that power
 
 ## Setup Instructions
 
-**Requirements:** Python 3.10+, ~1GB free disk for `torch` and the embedding model.
+**Requirements:** Python 3.10+, ~1GB free disk for `torch` and the embedding model
 
 ```bash
 # 1. Clone and enter the project
@@ -179,19 +171,19 @@ Final top-5:
    Because: energy sim (|0.58-0.50|) +0.92
 ```
 
-This is the most interesting sample: the words "rainy night" do not appear in any song's metadata, but the embedding model still pulled `Velvet Hours`, `Coffee Shop Stories`, and `Library Rain` to the top — songs whose *descriptor text* evokes that mood. This is the AI feature doing real work that no keyword match could.
+This is the most interesting sample: the words "rainy night" do not appear in any song's metadata, but the embedding model still pulled `Velvet Hours`, `Coffee Shop Stories`, and `Library Rain` to the top, songs whose *descriptor text* evokes that mood. This is the AI feature doing real work that no keyword match could.
 
 ---
 
 ## Design Decisions
 
-**RAG layered on top of the existing scorer, not replacing it.** Embeddings drive *candidate selection* (top-15); the original Module-3 `score_song` does the *final re-rank*. This keeps the AI feature load-bearing while preserving the deterministic, explainable logic the original project was evaluated on. It also means the rubric's "AI is fully integrated" requirement is met by construction — without retrieval, no candidates flow into the ranker.
+**RAG layered on top of scorer function.** Embeddings drive *candidate selection* (top-15); `score_song` does the *final re-rank*. This keeps the AI feature load-bearing while keeping the core logic deterministic.
 
-**No LLM in the pipeline.** I chose a keyword/regex parser over an Anthropic-API call for the query-understanding step. The tradeoff: brittleness on unusual phrasing in exchange for full reproducibility — anyone can clone and run the project with no API key, no rate limits, no cost. For a small course project, reproducibility won; in production the calculus would flip.
+**No LLM in the pipeline.** I chose a keyword/regex parser over an Anthropic-API call for the query-understanding step. The tradeoff: brittleness on unusual phrasing in exchange for full reproducibility. Essentially, anyone can clone and run the project with no API key, no rate limits, and no cost.
 
-**Local embeddings via `sentence-transformers/all-MiniLM-L6-v2`.** Free, deterministic, ~80MB on disk, runs on CPU. Rejected hosted alternatives (Voyage, OpenAI) for the same reproducibility reason. MiniLM is small enough to embed all 20 songs in well under a second.
+**Local embeddings via `sentence-transformers/all-MiniLM-L6-v2`.** Free, deterministic, ~80MB on disk, runs on CPU.
 
-**Hand-written `descriptor` column added to `songs.csv`.** Raw metadata (genre, mood, BPM) is too thin for embeddings to do meaningful semantic matching. I added one prose line per song describing its vibe — e.g. *"slow rainy lofi piano loops, perfect for late-night studying"*. Descriptors were written by hand rather than LLM-generated to keep the no-LLM contract end-to-end.
+**Hand-written `descriptor` column added to `songs.csv`.** Raw metadata (genre, mood, BPM) is too thin for embeddings to do meaningful semantic matching. I added one prose line per song describing its vibe (e.g. *"slow rainy lofi piano loops, perfect for late-night studying"*). Descriptors were written by hand rather than LLM-generated to keep the no-LLM contract end-to-end.
 
 **Pickle cache with sha256 keying.** The vector index regenerates automatically if `songs.csv` changes (cache key includes a hash of the descriptors), so nothing silently goes stale. The cache file is gitignored.
 
@@ -201,13 +193,13 @@ This is the most interesting sample: the words "rainy night" do not appear in an
 
 ## Testing Summary
 
-**18 unit tests pass** across three modules:
+**18 unit tests pass:**
 
 - `tests/test_query_parser.py` — 13 keyword-extraction unit tests covering genre, mood, energy, and acoustic detection (including multi-word genres like *"indie pop"* and *"hip hop"*).
 - `tests/test_rag.py` — retrieval sanity checks: a chill query surfaces lofi/ambient at the top, a workout query surfaces high-energy pop. Verifies the cache rebuilds when the corpus changes.
 - `tests/test_recommender.py` — original Module-3 scorer math: feature loading, score formula, top-K selection, ties.
 
-**Held-out evaluation (12 queries, one per catalog genre).** Each query is paired with the genre we expect to see in the top-5; a *hit* means that genre appears.
+**Held-out evaluation (12 queries, one per catalog genre):** Each query is paired with the genre we expect to see in the top-5; a *hit* means that genre appears.
 
 - Retrieval hit rate (cosine top-5): **12/12**
 - Final hit rate (after re-rank): **12/12**
@@ -216,11 +208,11 @@ This is the most interesting sample: the words "rainy night" do not appear in an
 
 Full per-query table in [eval/results.md](eval/results.md), regenerable via `python -m eval.run_eval`.
 
-**What worked.** The retrieval surprisingly outperforms expectations on metaphorical queries — *"moody jazz for a rainy night"* pulled the right songs even though "rainy" doesn't appear in any metadata. The two-stage pipeline (retrieve → re-rank) keeps the explainability of the original scorer intact while adding genuine semantic understanding.
+**What worked:** The retrieval surprisingly outperforms expectations on metaphorical queries — *"moody jazz for a rainy night"* pulled the right songs even though "rainy" doesn't appear in any metadata. The two-stage pipeline (retrieve → re-rank) keeps the explainability of the original scorer intact while adding genuine semantic understanding.
 
-**What didn't.** The query parser is the weakest link — it relies on the user including a recognizable genre or mood word. *"Something dreamy and slow"* parses to empty prefs and falls back to retrieval-only ranking. A real product would want either a fallback LLM call or a much larger keyword dictionary.
+**What didn't:** The query parser is the weakest link. It relies on the user including a recognizable genre or mood word. *"Something dreamy and slow"* parses to empty prefs and falls back to retrieval-only ranking. A real product would want either a fallback LLM call or a much larger keyword dictionary.
 
-**What I learned.** The original Module-3 scorer's biggest weakness — strict equality on genre/mood — is partially patched by retrieval, because the embedding can find a song that *feels* right even when its categorical labels don't match the parsed prefs. The two layers cover for each other in a way I didn't expect when I designed the pipeline. See [model_card.md](model_card.md) §6 for the full limitations breakdown and [reflection.md](reflection.md) for the four-profile evaluation that drove the design.
+**What I learned:** The strict equality on genre/mood is partially patched by retrieval, because the embedding can find a song that *feels* right even when its categorical labels don't match the parsed prefs. The two layers cover for each other in a way I didn't expect when I designed the pipeline. See [model_card.md](model_card.md) §6 for the full limitations breakdown and [reflection.md](reflection.md) for the four-profile evaluation that drove the design.
 
 ---
 
@@ -228,9 +220,9 @@ Full per-query table in [eval/results.md](eval/results.md), regenerable via `pyt
 
 Two big takeaways from this project:
 
-**Most "AI" decisions are integration decisions, not model decisions.** The hardest part wasn't picking an embedding model — it was deciding *where* the AI should sit in the pipeline so it added value without erasing the deterministic logic the project was evaluated on. Layering retrieval on top of scoring (rather than replacing it) was the design move that made everything else work, and it took longer to settle on than the implementation took to write.
+**Most "AI" decisions are integration decisions, not model decisions.** The hardest part wasn't picking an embedding model, it was deciding *where* the AI should sit in the pipeline so it added value without erasing the deterministic logic the project was evaluated on. Layering retrieval on top of scoring (rather than replacing it) was the design move that made everything else work, and it took longer to settle on than the implementation took to write.
 
-**Explainability and AI are not at odds.** I expected adding a neural retrieval step to obscure the recommendations, but because the AI only changes which 15 songs the deterministic scorer sees, every final recommendation still comes with the same human-readable "Because: ..." breakdown. This convinced me that the choice between "explainable" and "ML-powered" is mostly false — you can usually have both if you're thoughtful about pipeline placement.
+**Explainability and AI are not at odds.** I expected adding a neural retrieval step to obscure the recommendations, but because the AI only changes which 15 songs the deterministic scorer sees, every final recommendation still comes with the same human-readable "Because: ..." breakdown. This convinced me that the choice between "explainable" and "ML-powered" is mostly false. You can usually have both if you're thoughtful about pipeline placement.
 
 For deeper reflection on bias, evaluation, and what surprised me about the original scorer's behavior, see [model_card.md](model_card.md) and [reflection.md](reflection.md). The Reflection and Ethics section in [reflection.md](reflection.md#reflection-and-ethics) covers limitations and bias of the RAG layer, misuse risk, what surprised me in reliability testing, and one helpful and one flawed suggestion from collaborating with Claude during the build.
 
@@ -258,12 +250,6 @@ reflection.md        # Four-profile evaluation + weight-shift experiment
 
 ---
 
-## Portfolio Artifact
-
-- **Code:** [github.com/ao-hello/applied-ai-system-final](https://github.com/ao-hello/applied-ai-system-final)
-- **Live demo (Loom walkthrough):** *[...]*
-- **Try it locally:** `streamlit run app.py` (interactive UI) or `python -m src.main "your query"` (CLI).
-
 ### What this project says about me as an AI engineer
 
-I treat AI as a layer to integrate carefully, not a black box to bolt on. Rather than rewriting the original Module-3 recommender around an LLM, I layered semantic retrieval *on top* of the deterministic scorer so every final recommendation still carries a human-readable "Because: ..." breakdown while the system genuinely understands free-text queries. I built a held-out 12-query evaluation with hit rate and confidence metrics before calling the project done, wrote a model card and a reflection on bias, misuse, and limitations, and made deliberate reproducibility tradeoffs (local 80MB MiniLM embeddings, no API call in the pipeline) so anyone can clone and run it with no key, no rate limit, no cost. I'd rather ship a small, transparent, evaluable system than a flashy one I can't reason about and I'd rather know where my AI feature is *load-bearing* than wave at it as "AI-powered" and hope the user doesn't ask why.
+I treat AI as a layer to integrate carefully, not a black box to bolt on. Rather than rewriting code around an LLM, I layered semantic retrieval *on top* of it so that every final recommendation still carries a human-readable "Because: ..." breakdown while the system genuinely understands free-text queries. I built a held-out 12-query evaluation with hit rate and confidence metrics before calling the project done, wrote a model card and a reflection on bias, misuse, and limitations, and made deliberate reproducibility tradeoffs (local 80MB MiniLM embeddings, no API call in the pipeline) so anyone can clone and run it with no added cost.

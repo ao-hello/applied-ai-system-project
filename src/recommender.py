@@ -1,4 +1,4 @@
-"""Core recommender logic: data loading, scoring, and ranking."""
+"""Core recommender logic: data loading, scoring, and ranking"""
 
 import csv
 from dataclasses import dataclass
@@ -13,7 +13,7 @@ ACOUSTIC_THRESHOLD = 0.7
 
 @dataclass
 class Song:
-    """A single track and its numeric/categorical attributes."""
+    """A single track and its numeric/categorical attributes"""
     id: int
     title: str
     artist: str
@@ -28,7 +28,7 @@ class Song:
 
 @dataclass
 class UserProfile:
-    """A listener's taste preferences used to score songs."""
+    """A listener's taste preferences used to score songs"""
     favorite_genre: str
     favorite_mood: str
     target_energy: float
@@ -71,7 +71,7 @@ def _score(
 
 
 class Recommender:
-    """OOP recommender operating over `Song` + `UserProfile` dataclasses."""
+    """OOP recommender operating over `Song` + `UserProfile` dataclasses"""
 
     def __init__(self, songs: List[Song]):
         self.songs = songs
@@ -97,7 +97,7 @@ class Recommender:
 
 
 def load_songs(csv_path: str) -> List[Dict]:
-    """Load songs from CSV into list of dicts, casting numeric columns."""
+    """Load songs from CSV into list of dicts, casting numeric columns"""
     float_cols = {"energy", "valence", "danceability", "acousticness"}
     songs: List[Dict] = []
     with open(csv_path, newline="", encoding="utf-8") as f:
@@ -114,7 +114,7 @@ def load_songs(csv_path: str) -> List[Dict]:
 
 
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """Score a song dict against user_prefs dict; return (score, reasons)."""
+    """Score a song dict against user_prefs dict; return (score, reasons)"""
     return _score(
         song["genre"], song["mood"], song["energy"], song["acousticness"],
         user_prefs.get("genre", ""), user_prefs.get("mood", ""),
@@ -126,7 +126,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 def recommend_songs(
     user_prefs: Dict, songs: List[Dict], k: int = 5
 ) -> List[Tuple[Dict, float, str]]:
-    """Rank songs by score_song; return top-k as (song, score, explanation)."""
+    """Rank songs by score_song, return top-k as (song, score, explanation)"""
     scored = [
         (song, *score_song(user_prefs, song)) for song in songs
     ]

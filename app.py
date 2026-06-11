@@ -1,4 +1,4 @@
-"""Streamlit UI wrapper around the existing CLI pipeline.
+"""Streamlit UI wrapper around the existing CLI pipeline
 
 Run with:
     streamlit run app.py

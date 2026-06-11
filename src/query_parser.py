@@ -1,9 +1,9 @@
-"""Keyword/regex parser: free-text query -> structured prefs dict consumed by score_song."""
+"""Keyword/regex parser: free-text query -> structured prefs dict consumed by score_song"""
 
 import re
 from typing import Dict
 
-# Order matters: multi-word genres must match before their single-word components.
+#Order matters: multi-word genres must match before their single-word components
 GENRE_PATTERNS = [
     ("indie pop", r"\bindie\s*pop\b"),
     ("hip hop", r"\bhip[\s-]?hop\b|\btrap\b|\brap\b"),
@@ -28,7 +28,7 @@ MOOD_PATTERNS = [
     ("moody", r"\bmood\w*\b|\bmelanchol\w*\b|\bsad\b|\bemotional\b|\bintrospect\w*\b|\bnight drive\b"),
 ]
 
-# Cues that push target_energy up or down. Score-based so multiple cues compound.
+#cues that push target_energy up or down. Score-based so multiple cues compound
 HIGH_ENERGY_CUES = re.compile(
     r"\b(high energy|intense|hype|workout|gym|pump\w*|cardio|run|running|"
     r"party|festival|aggressive|hard|fast|loud|dance|dancing)\b"

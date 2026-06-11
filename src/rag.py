@@ -1,4 +1,4 @@
-"""Retrieval layer: embed song descriptors and return top-N candidates by cosine similarity."""
+"""Retrieval layer: embed song descriptors and return top-N candidates by cosine similarity"""
 
 import hashlib
 import os

@@ -1,9 +1,9 @@
-"""CLI entrypoint.
+"""CLI entrypoint
 
-Default mode (RAG): pass a free-text query.
+Default mode (RAG): pass a free-text query
     python -m src.main "chill lofi for studying"
 
-Demo mode: replay the four Phase-4 evaluation profiles (no query, no retrieval).
+Demo mode: replay the four Phase-4 evaluation profiles (no query, no retrieval)
     python -m src.main --demo
 """
 
@@ -76,7 +76,7 @@ def _rerank(
 
 
 def run_query(query: str) -> int:
-    # Imported lazily so `--demo` works without numpy / sentence-transformers installed.
+    #Imported lazily so `--demo` works without numpy / sentence-transformers installed
     from src.query_parser import parse_query
     from src.rag import build_index, retrieve
 
@@ -100,7 +100,7 @@ def run_query(query: str) -> int:
         print(f"{i:<3}{song['title']:<28}{song['artist']:<20}{cos:>6.3f}")
 
     if not candidates:
-        # Fallback: rank the whole catalog with score_song so we still return something.
+        # Fallback: rank the whole catalog with score_song so we still return something
         print("\nNo retrieval candidates; falling back to full-catalog scoring.")
         candidates = [(s, 0.0) for s in songs]
 

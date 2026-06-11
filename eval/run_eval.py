@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 # Each query is paired with the genre we expect to see in the top-5 results.
-# Covers all 12 genres in the catalog (one query per genre) for a balanced eval.
+#Covers all 12 genres in the catalog (one query per genre) for a balanced eval.
 EVAL_SET: List[Tuple[str, str]] = [
     ("chill lofi for studying", "lofi"),
     ("high energy pop for the gym", "pop"),
